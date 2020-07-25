@@ -2,8 +2,8 @@
 <hr>
 <div class="card-columns">
     <div *ngFor="let video of videos" class="card">
-      <img class="card-img-top" [src]="video.thumbnails.high.url" alt="Card image cap">
-      <div class="card-body">
+    <img class="card-img-top" [src]="video.thumbnails.high.url" alt="Card image cap">
+    <div class="card-body">
         <h5 class="card-title">{{ video.title }}</h5>
         <p class="card-text">
             <strong>Autor:</strong>&nbsp;{{ video.channelTitle }}
@@ -11,10 +11,10 @@
         <p class="card-text">
             <strong>Publicado:</strong>&nbsp;{{ video.publishedAt | date }}
         </p>
-        <button class="btn btn-outline-primary btn-block">
+        <button (click)="verVideo( video )" class="btn btn-outline-primary btn-block">
             Ver video
         </button>
-      </div>
+    </div>
     </div>
 </div>
 
