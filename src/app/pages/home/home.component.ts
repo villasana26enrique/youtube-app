@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { YoutubeService } from '../../services/youtube.service';
 import { Video } from 'src/app/models/youtube.models';
 import Swal from 'sweetalert2';
@@ -10,16 +10,41 @@ import Swal from 'sweetalert2';
 })
 export class HomeComponent implements OnInit {
 
+  showScrollHeight = 400;
+  hideScrollHeight = 200;
+
+  showGoUpButton: boolean;
+
   videos: Video[] = [];
 
-  constructor(public youtubeService: YoutubeService) {}
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    if (( window.pageYOffset ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop) > this.showScrollHeight) {
+      this.showGoUpButton = true;
+    } else if ( this.showGoUpButton &&
+      (window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop)
+      < this.hideScrollHeight) {
+      this.showGoUpButton = false;
+    }
+  }
+
+  constructor(public youtubeService: YoutubeService) {
+    this.showGoUpButton = false;
+  }
 
   ngOnInit(): void {
+    this.cargarVideos();
+  }
+
+  cargarVideos() {
     this.youtubeService.getVideos$()
       .subscribe( data => {
         /* De esta manera se va a agregando al array
         de videos, cada vez que este llamado se ejecute*/
-        console.log(data);
         this.videos.push( ...data );
       });
   }
@@ -39,7 +64,15 @@ export class HomeComponent implements OnInit {
       ></iframe>
       `
     });
-    console.log(video);
+  }
+
+  onScroll(): void {
+    this.cargarVideos();
+  }
+
+  scrollTop() {
+    document.body.scrollTop = 0; // Safari
+    document.documentElement.scrollTop = 0; // Other
   }
 
 }

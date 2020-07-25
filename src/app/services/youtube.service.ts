@@ -21,8 +21,8 @@ export class YoutubeService {
       .set('part', 'snippet')
       .set('key', this.apiKey)
       .set('maxResults', '10')
-      .set('playlistId', this.playlistId);
-
+      .set('playlistId', this.playlistId)
+      .set('pageToken', this.nextPageToken);
     return this.http.get<YoutubeResponse>( URL, { params } )
                     .pipe(
                       map( resp => {
